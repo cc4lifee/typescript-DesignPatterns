@@ -71,13 +71,14 @@ class BitcoinProcessor extends PaymentProcessor {
 
 function executePayment (paymentProcessor: PaymentProcessor, amount:number): void {
    paymentProcessor.processPayment(amount)
-
 }
 
 let creditCardProcessor = new CreditCardProcessor();
 let debitCardProcessor = new DebitCardProcessor();
 let paypalProcessor = new PaypalProcessor();
+let bitcoinProcessor = new BitcoinProcessor();
 
 executePayment(creditCardProcessor, 100)
 executePayment(debitCardProcessor, 50)
 executePayment(paypalProcessor, 150)
+executePayment(bitcoinProcessor, 150)
