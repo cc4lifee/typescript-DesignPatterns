@@ -103,7 +103,6 @@ interface ICustomerBuilder {
     setEmail(email: string): ICustomerBuilder;
     setPhoneNumber(phoneNumber: string): ICustomerBuilder;
     build(): ICustomer;
-
 }
 
 class Customer implements ICustomer {
@@ -116,7 +115,6 @@ class Customer implements ICustomer {
 }
 
 class CustomerBuilder implements ICustomerBuilder {
-
     private firstName: string = "";
     private lastName: string = "";
     private email: string = "";
@@ -168,5 +166,4 @@ class CustomerDirector {
 const builder: ICustomerBuilder = new CustomerBuilder()
 const director: CustomerDirector = new CustomerDirector(builder)
 const customer: ICustomer = director.buildMinimalCustomer('Cristhian', 'Camacho', 'cristhian@gmail.com')
-
 console.log(customer);

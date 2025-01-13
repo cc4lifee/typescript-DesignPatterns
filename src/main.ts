@@ -2,7 +2,7 @@ import './style.css'
 import typescriptLogo from './typescript.svg'
 import viteLogo from '/vite.svg'
 
-import './CreationalDesignPatterns/builderPattern'
+import './CreationalDesignPatterns/factoryPattern'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
