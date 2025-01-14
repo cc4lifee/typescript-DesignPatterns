@@ -42,10 +42,66 @@ class VideoPlayer extends MediaPlayerAbstraction {
 
 //Client code
 let windowsAudioPlayer = new AudioPlayer(new WindowsMediaPlayer());
-
 windowsAudioPlayer.playFile()
-
 
 let macOsVideoPlayer = new VideoPlayer(new MacOSMediaPlayer());
 macOsVideoPlayer.playFile()
 
+
+/**
+ * Real world implementation
+ */
+
+interface Database {
+    connect(): void;
+    query(query: string): void;
+    close(): void;
+}
+
+class PostgresSQLDatabase implements Database {
+    connect(): void {
+        console.log(`Connecting to PostgreSQL`);
+    }
+    query(query: string): void {
+        console.log(`Executing query: ${query}`);
+    }
+    close(): void {
+        console.log(`Closing connection PostgreSQL`);
+    }
+
+}
+
+class MongoDBDabase implements Database {
+    connect(): void {
+        console.log(`Connecting to MongoDB`);
+    }
+    query(query: string): void {
+        console.log(`Executing query: ${query}`);
+    }
+    close(): void {
+        console.log(`Closing connection MongoDB`);
+    }
+
+}
+
+abstract class DatabaseService {
+    constructor(protected database: Database) { }
+
+    abstract fetchData(query: string): void;
+}
+
+class ClientDatabaseService extends DatabaseService {
+
+    public fetchData(query: string): void {
+        this.database.connect();
+        this.database.query(query);
+        this.database.close();
+    }
+
+}
+
+let postgreService = new ClientDatabaseService(new PostgresSQLDatabase());
+postgreService.fetchData('SELECT Users')
+
+let mongoDbService = new ClientDatabaseService(new MongoDBDabase());
+mongoDbService.fetchData('SELECT Users')
