@@ -61,13 +61,101 @@ class ConcreteSubject implements Subject {
 
 // Client code
 
-const subject = new ConcreteSubject()
-const observer1 = new ConcreteObserver(1);
-subject.addObserver(observer1)
+// const subject = new ConcreteSubject()
+// const observer1 = new ConcreteObserver(1);
+// subject.addObserver(observer1)
 
-const observer2 = new ConcreteObserver(2);
-subject.addObserver(observer2)
+// const observer2 = new ConcreteObserver(2);
+// subject.addObserver(observer2)
 
-subject.setState(123)
+// subject.setState(123)
+
+
+/**
+ * Real world implementation 
+ * 
+ */
+
+interface WeatherObserver {
+    update(temperature: number, humidity: number, pressure: number): void
+}
+
+interface WeatherSubject {
+    registerObserver(observer: WeatherObserver): void
+    removeObserver(observer: WeatherObserver): void
+    notifyObservers(): void
+}
+
+class WeatherData implements WeatherSubject {
+    private observers: WeatherObserver[] = [];
+    private temperature: number | undefined;
+    private humidity: number | undefined;
+    private pressure: number | undefined;
+
+    public registerObserver(observer: WeatherObserver): void {
+        this.observers.push(observer)
+    }
+
+    public removeObserver(observer: WeatherObserver): void {
+        const index = this.observers.indexOf(observer)
+
+        if (index >= 0) {
+            this.observers.splice(index, 1)
+        }
+    }
+
+    public notifyObservers(): void {
+        if (this.temperature !== undefined && this.humidity !== undefined && this.pressure !== undefined) {
+
+            for (let observer of this.observers) {
+                observer.update(this.temperature, this.humidity, this.pressure)
+            }
+        }
+    }
+
+    public setMeasurements(temperature: number, humidity: number, pressure: number): void {
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.pressure = pressure;
+        this.notifyObservers()
+    }
+}
+
+class CurrentConditionDisplay implements WeatherObserver {
+    private temperature: number | undefined;
+    private humidity: number | undefined;
+    private pressure: number | undefined;
+
+    constructor(private weatherData: WeatherSubject) {
+        this.weatherData.registerObserver(this)
+    }
+
+    public update(temperature: number, humidity: number, pressure: number): void {
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.pressure = pressure;
+        this.display()
+    }
+
+    public display(): void {
+        if (this.temperature !== undefined && this.humidity !== undefined && this.pressure !== undefined) {
+            console.log(`Temperature: ${this.temperature}, Humidity: ${this.humidity}, Pressure: ${this.pressure}`);
+        }
+    }
+}
+
+//Client Code
+
+const weatherData = new WeatherData();
+const currentDisplay = new CurrentConditionDisplay(weatherData);
+
+//Simulate new weather adjustments
+
+weatherData.setMeasurements(80, 65, 30.4)
+
+
+
+
+
 
 
